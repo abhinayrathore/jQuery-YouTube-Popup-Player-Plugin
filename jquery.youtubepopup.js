@@ -1,7 +1,7 @@
 /*!
  * jQuery YouTube Popup Player Plugin v2.3
  * http://lab.abhinayrathore.com/jquery_youtube/
- * Last Updated: Feb 26, 2013
+ * Last Updated: Oct 7, 2013
  */
 (function ($) {
     var YouTubeDialog = null;
@@ -43,7 +43,7 @@
 						}
 
                         //Format YouTube URL
-                        var YouTubeURL = "http://www.youtube.com/embed/" + youtubeId + "?rel=0&showsearch=0&autohide=" + options.autohide;
+                        var YouTubeURL = (options.ssl ? "https://" : "http://") + "www.youtube.com/embed/" + youtubeId + "?rel=0&showsearch=0&autohide=" + options.autohide;
                         YouTubeURL += "&autoplay=" + options.autoplay + "&controls=" + options.controls + "&fs=" + options.fs + "&loop=" + options.loop;
                         YouTubeURL += "&showinfo=" + options.showinfo + "&color=" + options.color + "&theme=" + options.theme;
 
@@ -125,6 +125,7 @@
 		'fs': 1,
 		'loop': 0,
 		'showinfo': 0,
-		'theme': 'light'
+		'theme': 'light',
+		'ssl': false
     };
 })(jQuery);
