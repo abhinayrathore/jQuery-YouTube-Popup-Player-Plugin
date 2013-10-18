@@ -1,10 +1,11 @@
 /*!
  * jQuery YouTube Popup Player Plugin v2.3
  * http://lab.abhinayrathore.com/jquery_youtube/
- * Last Updated: Feb 26, 2013
+ * https://github.com/abhinayrathore/jQuery-YouTube-Popup-Player-Plugin
  */
 (function ($, window) {
     var YouTubeDialog = null;
+	var defaultCss = {};
     var methods = {
         //initialize plugin
         init: function (options) {
@@ -13,12 +14,17 @@
             // initialize YouTube Player Dialog
             if (YouTubeDialog == null) {
                 YouTubeDialog = $('<div>').css({ display: 'none', padding: 0 });
-				if(options.cssClass != '') YouTubeDialog.addClass(options.cssClass);
-                $('body').append(YouTubeDialog);
-                YouTubeDialog.dialog({ autoOpen: false, resizable: false, draggable: options.draggable, modal: options.modal,
+				$('body').append(YouTubeDialog);
+                YouTubeDialog.dialog({ autoOpen: false, resizable: false, draggable: options.draggable, modal: options.modal, dialogClass: options.cssClass,
+					create: function(){
+						defaultCss.backgroundImage = $(".ui-dialog").css('background-image');
+						defaultCss.border = $(".ui-dialog").css('border');
+						defaultCss.backgroundColor = $(".ui-dialog").css('background-color');
+					},
                     close: function () {
 						YouTubeDialog.html(''); 
 						$(".ui-dialog-titlebar").show();
+						$(".ui-dialog").css({'background-image':defaultCss.backgroundImage, 'border':defaultCss.border, 'background-color':defaultCss.backgroundColor});
 					}
                 });
             }
@@ -30,13 +36,13 @@
                     obj.data('YouTube', { target: obj, 'active': true });
                     $(obj).bind('click.YouTubePopup', function () {
                         var youtubeId = options.youtubeId;
-                        if ($.trim(youtubeId) == '' && obj.is("a")) {
+						if ($.trim(youtubeId) == '' && obj.is("a")) {
 							youtubeId = getYouTubeIdFromUrl(obj.attr("href"));
 						}
 						if ($.trim(youtubeId) == '' || youtubeId === false) {
 							youtubeId = obj.attr(options.idAttribute);
 						}
-                        var videoTitle = $.trim(options.title);
+						var videoTitle = $.trim(options.title);
 						if (videoTitle == '') {
 							if (options.useYouTubeTitle) setYouTubeTitle(youtubeId);
 							else videoTitle = obj.attr('title');
@@ -53,12 +59,17 @@
                         YouTubeDialog.dialog({ 'minWidth': options.width, 'minHeight': options.height, title: videoTitle });
                         YouTubeDialog.dialog('open');
 						$(".ui-widget-overlay").fadeTo('fast', options.overlayOpacity); //set Overlay opacity
+						var titleBar = $(".ui-dialog-titlebar");
 						if(options.hideTitleBar && options.modal){ //hide Title Bar (only if Modal is enabled)
-							$(".ui-dialog-titlebar").hide(); //hide Title Bar
+							titleBar.hide(); //hide Title Bar
 							$(".ui-widget-overlay").click(function () { YouTubeDialog.dialog("close"); }); //automatically assign Click event to overlay
 						}
 						if(options.clickOutsideClose && options.modal){ //assign clickOutsideClose event only if Modal option is enabled
 							$(".ui-widget-overlay").click(function () { YouTubeDialog.dialog("close"); }); //assign Click event to overlay
+						}
+						titleBar.removeClass("ui-corner-all").addClass("ui-corner-top"); //only round the bottom corners on titlebar
+						if(!options.showBorder){
+							$(".ui-dialog").css({'background-image':'none', 'border':'none', 'background-color':'transparent'});
 						}
                         return false;
                     });
@@ -83,7 +94,7 @@
 		var url = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=json";
 		$.ajax({ url: url, dataType: 'jsonp', cache: true, success: function(data){ YouTubeDialog.dialog({ title: data.entry.title.$t }); } });
 	}
-	
+
 	function getYouTubeIdFromUrl(youtubeUrl){
 		var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
 		var match = youtubeUrl.match(regExp);
@@ -110,7 +121,7 @@
 		'title': '',
 		'useYouTubeTitle': true,
 		'idAttribute': 'rel',
-		'cssClass': '',
+		'cssClass': 'YouTubeDialog',
 		'draggable': false,
 		'modal': true,
 		'width': 640,
@@ -125,6 +136,7 @@
 		'fs': 1,
 		'loop': 0,
 		'showinfo': 0,
-		'theme': 'light'
+		'theme': 'light',
+		'showBorder': true
     };
 })(jQuery, window);
