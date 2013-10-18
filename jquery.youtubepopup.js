@@ -3,7 +3,7 @@
  * http://lab.abhinayrathore.com/jquery_youtube/
  * Last Updated: Feb 26, 2013
  */
-(function ($) {
+(function ($, window) {
     var YouTubeDialog = null;
     var methods = {
         //initialize plugin
@@ -43,7 +43,7 @@
 						}
 
                         //Format YouTube URL
-                        var YouTubeURL = "http://www.youtube.com/embed/" + youtubeId + "?rel=0&showsearch=0&autohide=" + options.autohide;
+                        var YouTubeURL = window.location.protocol+"//www.youtube.com/embed/" + youtubeId + "?rel=0&showsearch=0&autohide=" + options.autohide;
                         YouTubeURL += "&autoplay=" + options.autoplay + "&controls=" + options.controls + "&fs=" + options.fs + "&loop=" + options.loop;
                         YouTubeURL += "&showinfo=" + options.showinfo + "&color=" + options.color + "&theme=" + options.theme;
 
@@ -127,4 +127,4 @@
 		'showinfo': 0,
 		'theme': 'light'
     };
-})(jQuery);
+})(jQuery, window);
