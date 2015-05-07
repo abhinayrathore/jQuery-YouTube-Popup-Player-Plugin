@@ -52,7 +52,7 @@
                         obj.data('YouTube', {
                             target: obj
                         });
-                        $(obj).bind('click.YouTubePopup', function () {
+                        $(obj).bind('click.YouTubePopup', function (event) {
                             youtubeId = options.youtubeId;
                             if ($.trim(youtubeId) === '' && obj.is("a")) {
                                 youtubeId = getYouTubeIdFromUrl(obj.attr("href"));
@@ -107,7 +107,7 @@
                                     'background-color': 'transparent'
                                 });
                             }
-                            return false;
+                            event.preventDefault();
                         });
                     }
                 });
