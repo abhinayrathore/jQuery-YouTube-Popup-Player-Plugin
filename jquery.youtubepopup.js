@@ -75,14 +75,14 @@
                             YouTubeURL += "&showinfo=" + options.showinfo + "&color=" + options.color + "&theme=" + options.theme;
 
                             //Setup YouTube Dialog
-                            YouTubeDialog.html(getYouTubePlayer(YouTubeURL, options.width, options.height));
+                            YouTubeDialog.html(getYouTubePlayer(YouTubeURL, getDimension('width',options), getDimension('height',options)));
                             YouTubeDialog.dialog({ //reset width and height
                                 width: 'auto',
                                 height: 'auto'
                             });
                             YouTubeDialog.dialog({
-                                minWidth: options.width,
-                                minHeight: options.height,
+                                minWidth: getDimension('width',options),
+                                minHeight: getDimension('height',options),
                                 title: videoTitle
                             });
                             YouTubeDialog.dialog('open');
@@ -125,6 +125,28 @@
 		YouTubePlayer += 'height="' + height + '" src="' + URL + '" frameborder="0" allowfullscreen></iframe>';
 		return YouTubePlayer;
 	}
+    
+        function getDimension(dimension,options){
+		//Dimension must be 'width' or 'height' to get return value
+        var browserWidth  = $( window ).width();
+        var browserHeight = $( window ).height(); 
+        var tempWidth = options.width;  //Use option value as default
+        var tempHeight = options.height; //Use option value as default
+        
+        if(browserWidth<options.width||browserHeight<options.height){//Viewpoint is smaller than options
+            if(browserWidth<browserHeight){ //Portrate View    
+				if(browserWidth<options.width){ //Browser is smaller in width
+		            tempWidth = browserWidth - 5;
+					tempHeight = tempWidth / 1.3;  //Ratio to keep video perspective			
+				}	
+            }else    //Landscape View
+            {
+			    if(browserHeight<options.height){
+                    tempHeight = browserHeight - 5
+                    tempWidth = tempHeight * 1.3 //
+                }
+            }
+        }
 
 	function setYouTubeTitle(id) {
         $.ajax({
