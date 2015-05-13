@@ -126,27 +126,6 @@
 		return YouTubePlayer;
 	}
     
-        function getDimension(dimension,options){
-		//Dimension must be 'width' or 'height' to get return value
-        var browserWidth  = $( window ).width();
-        var browserHeight = $( window ).height(); 
-        var tempWidth = options.width;  //Use option value as default
-        var tempHeight = options.height; //Use option value as default
-        
-        if(browserWidth<options.width||browserHeight<options.height){//Viewpoint is smaller than options
-            if(browserWidth<browserHeight){ //Portrate View    
-				if(browserWidth<options.width){ //Browser is smaller in width
-		            tempWidth = browserWidth - 5;
-					tempHeight = tempWidth / 1.3;  //Ratio to keep video perspective			
-				}	
-            }else    //Landscape View
-            {
-			    if(browserHeight<options.height){
-                    tempHeight = browserHeight - 5
-                    tempWidth = tempHeight * 1.3 //
-                }
-            }
-        }
 
 	function setYouTubeTitle(id) {
         $.ajax({
@@ -176,6 +155,36 @@
 		}
 	}
 
+        function getDimension(dimension,options){
+		//Dimension must be 'width' or 'height' to get return value
+        var browserWidth  = $( window ).width();
+        var browserHeight = $( window ).height(); 
+        var tempWidth = options.width;  //Use option value as default
+        var tempHeight = options.height; //Use option value as default
+        
+        if(browserWidth<options.width||browserHeight<options.height){//Viewpoint is smaller than options
+            if(browserWidth<browserHeight){ //Portrate View    
+				if(browserWidth<options.width){ //Browser is smaller in width
+		            tempWidth = browserWidth - 5;
+					tempHeight = tempWidth / 1.3;  //Ratio to keep video perspective			
+				}	
+            }else    //Landscape View
+            {
+			    if(browserHeight<options.height){
+                    tempHeight = browserHeight - 5
+                    tempWidth = tempHeight * 1.3 //
+                }
+            }
+        }
+
+        if(dimension==='width'){
+            return tempWidth;
+        }else if(dimension==='height'){
+            return tempHeight;
+        }
+			
+	}
+    
 	$.fn.YouTubePopup = function (method) {
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
