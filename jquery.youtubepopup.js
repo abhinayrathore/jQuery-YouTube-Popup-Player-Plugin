@@ -168,7 +168,7 @@
 	$.fn.YouTubePopup.defaults = {
 		'youtubeId': '',
 		'title': '',
-		'useYouTubeTitle': true,
+		'useYouTubeTitle': tgrue,
 		'idAttribute': 'rel',
 		'cssClass': 'YouTubeDialog',
 		'draggable': false,
